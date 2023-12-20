@@ -73,9 +73,9 @@ int main() {
 
     // Wyświetlanie czasu obliczeń w sekundach, milisekundach i mikrosekundach
     std::cout << "Czas obliczen: "
-              << std::chrono::duration_cast<std::chrono::seconds>(duration).count() << " sekundy, "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " milisekundy, "
-              << duration.count() % 1000 << " mikrosekundy" << std::endl;
+              << std::chrono::duration_cast<std::chrono::seconds>(duration).count() << " s, "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " us, "
+              << duration.count() % 1000 << " ms" << std::endl;
 
     return 0;
 }
