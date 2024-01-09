@@ -4,17 +4,18 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include <cstdint>
 
 // Ilość wątków
 int num_threads;
 
 using FloatType = double; // Użycie podwójnej precyzji
 
-FloatType calculate_integral(double start, double end, int num_steps) {
+FloatType calculate_integral(double start, double end, uint64_t num_steps) {
     FloatType step = (end - start) / num_steps;
     FloatType sum = 0.0;
 
-    for (int i = 0; i < num_steps; ++i) {
+    for (uint64_t i = 0; i < num_steps; ++i) {
         FloatType x = start + (i + 0.5) * step;
         sum += 4.0 / (1.0 + x * x);
     }
@@ -22,16 +23,16 @@ FloatType calculate_integral(double start, double end, int num_steps) {
     return step * sum;
 }
 
-void thread_function(int thread_id, double a, double b, int num_steps, int thread_count, std::vector<FloatType>& results) {
+void thread_function(int thread_id, double a, double b, uint64_t num_steps, int thread_count, std::vector<FloatType>& results) {
     results[thread_id] = calculate_integral(a + thread_id * (b - a) / thread_count, a + (thread_id + 1) * (b - a) / thread_count, num_steps / thread_count);
 }
 
 int main() {
     const double a = 0.0;  // Początek przedziału całkowania
     const double b = 1.0;  // Koniec przedziału całkowania
-    const unsigned long long int num_steps = 440000000000;  // Ilość kroków całkowania
+    const uint64_t num_steps = 3000000000;  // Ilość kroków całkowania - używamy uint64_t, ponieważ long long int nie wystarcza
 
-    int precision = 60;  // Ilość miejsc po przecinku
+    int precision = 52;  // Ilość miejsc po przecinku
 
     /* Wczytywanie ilości miejsc po przecinku od użytkownika
     std::cout << "Podaj ilosc miejsc po przecinku: ";
@@ -74,8 +75,8 @@ int main() {
     // Wyświetlanie czasu obliczeń w sekundach, milisekundach i mikrosekundach
     std::cout << "Czas obliczen: "
               << std::chrono::duration_cast<std::chrono::seconds>(duration).count() << " s, "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " us, "
-              << duration.count() % 1000 << " ms" << std::endl;
+              << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " ms, "
+              << duration.count() % 1000 << " us" << std::endl;
 
     return 0;
 }
